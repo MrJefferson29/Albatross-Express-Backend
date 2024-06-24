@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap&family=Hammersmith+One&family=Londrina+Solid:wght@900&display=swap');
+.bg-planet-svg {
+    position: absolute;
+    top: 250px;
+    right: -205px;
+    z-index: -5;
+    width: 450px;
+}
+
+.bg-planet2-svg {
+    position: absolute;
+    bottom: -125px;
+    left: -180px;
+    z-index: -5;
+    width: 450px;
+    opacity: 0.8;
+}
+
+.bg-planet3-svg {
+    position: absolute;
+    top: -65px;
+    left: -170px;
+    z-index: -5;
+    width: 450px;
+    opacity: 0.8;
+}
+
+.story-card-wrapper {
+    position: relative;
+    min-height: 850px;
+    width: 1050px;
+    margin: 1.2rem auto;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.story-card {
+    width: 70%;
+    position: relative;
+    height: 490px;
+    border-radius: 6px;
+    margin: 2rem 1rem;
+    border: 1px solid rgba(121, 118, 118, 0.3);
+    box-shadow: 0 0 10px 5px rgba(88, 88, 88, 0.1);
+    background-color: white;
+    transition: 350ms ease all;
+}
+
+@media only screen and (max-width: 1050px) {
+    .story-card-wrapper {
+        width: 100%;
+        justify-content: space-evenly;
+    }
+    .story-card {
+        width: 45%;
+    }
+    .bg-planet3-svg,
+    .bg-planet-svg,
+    .bg-planet2-svg {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 674px) {
+    .story-card {
+        width: 380px
+    }
+}
+
+.story-card:hover {
+    transform: scale(1.1);
+}
+
+.story-card a.story-link {
+    text-decoration: none;
+}
+
+.story-card img.story-image {
+    width: 100%;
+    height: 75%;
+    border-radius: 6px 6px 0 0;
+    object-fit: cover;
+}
+
+.story-card .story-content-wrapper {
+    padding: 3px;
+}
+
+.story-card div.story-title {
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    color: black;
+    font-family: 'Times New Roman', serif;
+    padding: 5px 3px;
+    font-weight: 900;
+    word-wrap: break-word;
+}
+
+.story-card .story-text {
+    height: 25px;
+    overflow: hidden;
+    word-wrap: break-word;
+    font-weight: 900;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 2px;
+}
+.story-card .story-texts {
+    height: 25px;
+    overflow: hidden;
+    word-wrap: break-word;
+    float: right;
+    font-weight: 800;
+    font-family: 'Brothabric';
+    color: black;
+    font-size: 1.4rem;
+}
+
+.story-card .story-text,
+.story-card .story-text * {
+    color: rgb(92, 92, 92);
+    font-size: 1.1rem;
+    font-weight: normal;
+}
+
+.story-card .story-createdAt {
+    font-family: 'Hughs';
+    color: rgb(48, 47, 47);
+    font-weight: 600;
+    font-size: 1.4rem;
+    float: right;
+    padding: 30px;
+}

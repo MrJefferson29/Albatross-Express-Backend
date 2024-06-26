@@ -15,14 +15,7 @@ const ensureDirectoryExistence = (filePath) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const rootDir = path.dirname(require.main.filename);
-
-        let uploadDir;
-        if (file.fieldname === "photo") {
-            uploadDir = path.join(rootDir, "/public/userPhotos");
-        } else {
-            uploadDir = path.join(rootDir, "/public/storyImages");
-        }
+        const uploadDir = '/tmp/uploads';
 
         // Ensure the directory exists or create it
         ensureDirectoryExistence(uploadDir);

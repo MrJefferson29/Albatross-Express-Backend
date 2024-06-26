@@ -1,34 +1,56 @@
-const multer = require('multer');
-const path = require('path');
-const CustomError = require('./path/to/CustomError');
+const CustomError = require("../error/CustomError");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+
+// Create a function to ensure directory existence
+const ensureDirectoryExistence = (filePath) => {
+    const dirname = path.dirname(filePath);
+    if (fs.existsSync(dirname)) {
+        return true;
+    }
+    ensureDirectoryExistence(dirname);
+    fs.mkdirSync(dirname);
+};
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         const rootDir = path.dirname(require.main.filename);
-        if (file.fieldname === 'photo') {
-            cb(null, path.join(rootDir, '/public/userPhotos'));
+
+        let uploadDir;
+        if (file.fieldname === "photo") {
+            uploadDir = path.join(rootDir, "/public/userPhotos");
         } else {
-            cb(null, path.join(rootDir, '/public/storyImages'));
+            uploadDir = path.join(rootDir, "/public/storyImages");
         }
+
+        // Ensure the directory exists or create it
+        ensureDirectoryExistence(uploadDir);
+
+        cb(null, uploadDir);
     },
-    filename: function(req, file, cb) {
-        if (file.fieldname === 'photo') {
-            const extension = file.mimetype.split('/')[1];
-            req.savedUserPhoto = 'photo_user_' + req.user.id + '.' + extension;
+
+    filename: function (req, file, cb) {
+        const extension = file.mimetype.split("/")[1];
+
+        if (file.fieldname === "photo") {
+            req.savedUserPhoto = `photo_user_${req.user.id}.${extension}`;
             cb(null, req.savedUserPhoto);
         } else {
-            req.savedStoryImage = 'image_' + new Date().toISOString().replace(/:/g, '-') + file.originalname;
+            req.savedStoryImage = `image_${new Date().toISOString().replace(/:/g, '-')}${path.extname(file.originalname)}`;
             cb(null, req.savedStoryImage);
         }
     }
 });
 
 const fileFilter = (req, file, cb) => {
-    const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/heic', 'image/heiv'];
+    const allowedMimeTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/heic", "image/heiv"];
+
     if (!allowedMimeTypes.includes(file.mimetype)) {
-        return cb(new CustomError('Please provide a valid image file', 400), false);
+        cb(new CustomError("Please provide a valid image file", 400), false);
+    } else {
+        cb(null, true);
     }
-    cb(null, true);
 };
 
 const imageUpload = multer({ storage, fileFilter });

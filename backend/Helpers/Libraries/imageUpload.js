@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
             cb(null , path.join( rootDir,"/public/userPhotos"))
         }
         else {
-            cb(null , path.join( rootDir,"/opt/rust/public/storyImages"))
+            cb(null , path.join( rootDir,"/public/storyImages"))
         }
 
     } ,

@@ -3,43 +3,34 @@ const Story = require("../Models/story");
 const deleteImageFile = require("../Helpers/Libraries/deleteImageFile");
 const {searchHelper, paginateHelper} =require("../Helpers/query/queryHelpers")
 
-const addStory = asyncErrorWrapper(async  (req,res,next)=> {
-
-    const {title,content, address, status, time} = req.body 
-
-    var wordCount = content.trim().split(/\s+/).length ; 
-   
-    let readtime = Math.floor(wordCount /200)   ;
-
-
-    try {
-        const newStory = await Story.create({
-            title,
-            content,
-            address,
-            status,
-            time,
-            author :req.user._id ,
-            image : req.savedStoryImage,
-            readtime
-        })
-
-        return res.status(200).json({
-            success :true ,
-            message : "add story successfully ",
-            data: newStory
-        })
-    }
-
-    catch(error) {
-
-        deleteImageFile(req)
-
-        return next(error)
-        
-    }
+const addStory = asyncErrorWrapper(async (req, res, next) => {
+    const { title, content, address, status, time } = req.body;
   
-})
+    const wordCount = content.trim().split(/\s+/).length;
+    const readtime = Math.floor(wordCount / 200);
+  
+    try {
+      const newStory = await Story.create({
+        title,
+        content,
+        address,
+        status,
+        time,
+        author: req.user._id,
+        image: req.savedStoryImage,
+        readtime,
+      });
+  
+      return res.status(200).json({
+        success: true,
+        message: "Add story successfully",
+        data: newStory,
+      });
+    } catch (error) {
+      deleteImageFile(req);
+      return next(error);
+    }
+  });
 
 const getAllStories = asyncErrorWrapper( async (req,res,next) =>{
 

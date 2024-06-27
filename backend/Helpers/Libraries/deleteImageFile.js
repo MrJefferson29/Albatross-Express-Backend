@@ -1,15 +1,18 @@
 const path = require("path")
 const fs = require("fs")
 
-const deleteImageFile =(req ,deleteImage) => {
-
-    const rootDir = path.dirname(require.main.filename) 
-
-    filePath = path.join( rootDir,`/public/storyImages/${deleteImage}`)
-    
-    fs.unlink(filePath, (res) => console.log(res,"file delete "));
-    
-}
-
+const deleteImageFile = (req) => {
+    const filePath = req.savedStoryImage ? path.join(__dirname, "/public/storyImages/", req.savedStoryImage) : null;
+  
+    if (filePath && fs.existsSync(filePath)) {
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error(`Error deleting file: ${err}`);
+        } else {
+          console.log(`Successfully deleted file: ${filePath}`);
+        }
+      });
+    }
+  };
 
 module.exports = deleteImageFile

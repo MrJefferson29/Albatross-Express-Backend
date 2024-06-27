@@ -26,8 +26,8 @@ const storage = multer.diskStorage({
 
   filename: function (req, file, cb) {
     if (file.fieldname === 'photo') {
-      const extensions = file.mimetype.split('/')[1];
-      req.savedUserPhoto = 'photo_user_' + req.user.id + '.' + extensions;
+      const extension = file.mimetype.split('/')[1];
+      req.savedUserPhoto = 'photo_user_' + req.user.id + '.' + extension;
       cb(null, req.savedUserPhoto);
     } else {
       req.savedStoryImage = 'image_' + new Date().toISOString().replace(/:/g, '-') + file.originalname;

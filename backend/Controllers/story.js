@@ -3,34 +3,51 @@ const Story = require("../Models/story");
 const deleteImageFile = require("../Helpers/Libraries/deleteImageFile");
 const {searchHelper, paginateHelper} =require("../Helpers/query/queryHelpers")
 
-const addStory = asyncErrorWrapper(async (req, res, next) => {
+const cloudinary = require("cloudinary").v2;
+
+const handleUpload = async (file) => {
+    const res = await cloudinary.uploader.upload(file, {
+        resource_type: "auto",
+    });
+    return res.secure_url;
+};
+
+const addStory = async (req, res, next) => {
     const { title, content, address, status, time } = req.body;
-  
+
+    if (!req.file) {
+        return res.status(400).json({ error: 'Please upload a file' });
+    }
+
     const wordCount = content.trim().split(/\s+/).length;
     const readtime = Math.floor(wordCount / 200);
-  
+
     try {
-      const newStory = await Story.create({
-        title,
-        content,
-        address,
-        status,
-        time,
-        author: req.user._id,
-        image: req.savedStoryImage,
-        readtime,
-      });
-  
-      return res.status(200).json({
-        success: true,
-        message: "Add story successfully",
-        data: newStory,
-      });
+        const b64 = Buffer.from(req.file.buffer).toString("base64");
+        let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+        const imageUrl = await handleUpload(dataURI);
+
+        const newStory = await Story.create({
+            title,
+            content,
+            address,
+            status,
+            time,
+            author: req.user._id,
+            readtime,
+            imageUrl,
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Story added successfully",
+            data: newStory,
+        });
     } catch (error) {
-      deleteImageFile(req);
-      return next(error);
+        console.error("Error adding story:", error);
+        return next(error);
     }
-  });
+};
 
 const getAllStories = asyncErrorWrapper( async (req,res,next) =>{
 

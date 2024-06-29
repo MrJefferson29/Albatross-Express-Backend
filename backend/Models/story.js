@@ -38,7 +38,7 @@ const StorySchema = new mongoose.Schema({
         type: String,
         required: [true, "Please a provide the time left to delivery"],
     },
-    image: {
+    imageUrl: {
         type: String,
         default: "default.jpg"
     },
